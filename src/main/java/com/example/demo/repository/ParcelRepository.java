@@ -13,4 +13,6 @@ public interface ParcelRepository extends JpaRepository<Parcel, Long> {
     @Override
     @EntityGraph(attributePaths = {"warehouse"})
     List<Parcel> findAll();
+
+    long countByWarehouseId(Long id);
 }

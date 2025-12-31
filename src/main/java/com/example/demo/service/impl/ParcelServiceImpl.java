@@ -2,9 +2,14 @@ package com.example.demo.service.impl;
 
 import com.example.demo.entity.Parcel;
 import com.example.demo.repository.ParcelRepository;
+import com.example.demo.repository.WarehouseRepository;
+import com.example.demo.request.MoveParcelRequest;
+import com.example.demo.response.MoveParcelResponse;
+import com.example.demo.response.WarehouseResponse;
 import com.example.demo.service.ParcelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -12,9 +17,32 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ParcelServiceImpl implements ParcelService {
     private final ParcelRepository parcelRepository;
+    private final WarehouseRepository warehouseRepository;
 
     @Override
     public List<Parcel> getAllParcels() {
         return parcelRepository.findAll();
+    }
+
+    @Override
+    @Transactional
+    public MoveParcelResponse moveParcel(MoveParcelRequest request) {
+        /**
+         * check if new warehouse exists and has enough space left
+         */
+        WarehouseResponse warehouseResponse = warehouseRepository.findById(request.getDestinationWarehouseId())
+                .map(warehouse -> {
+                    long parcelCount = parcelRepository.countByWarehouseId(warehouse.getId());
+                    if (parcelCount >= warehouse.getCapacity()) {
+                        return new WarehouseResponse(false, "Warehouse is at full capacity");
+                    }
+                    return new WarehouseResponse(true, "Warehouse has enough space");
+                })
+                .orElse(new WarehouseResponse(false, "Warehouse not found"));
+        return MoveParcelResponse.builder()
+                .message(warehouseResponse.getMessage())
+                .parcelId(request.getParcelId())
+                .newWarehouseId(request.getDestinationWarehouseId())
+                .build();
     }
 }
