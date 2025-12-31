@@ -10,4 +10,9 @@ import org.springframework.stereotype.Service;
 public class StaffServiceImpl implements StaffService {
 
     private final StaffRepository staffRepository;
+
+    @Override
+    public Object findAll() {
+        return staffRepository.findAll();
+    }
 }
