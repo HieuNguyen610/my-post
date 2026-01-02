@@ -1,11 +1,15 @@
 package com.example.demo;
 
 import com.example.demo.entity.Warehouse;
+import com.example.demo.repository.WarehouseRepository;
 import com.example.demo.service.WarehouseService;
-import lombok.RequiredArgsConstructor;
+import com.example.demo.service.impl.WarehouseServiceImpl;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,16 +18,20 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class WarehouseTest {
 
-    @Mock
     private  WarehouseService warehouseService;
 
-    @Test
-    public void whenGetAll_shouldReturnList() {
+    @Mock
+    private WarehouseRepository warehouseRepository;
+
+    private static List<Warehouse> mockBooks = new ArrayList<>();
+
+
+    @BeforeAll
+    public static void beforeAll() {
         // 1. create mock data
-        List<Warehouse> mockBooks = new ArrayList<>();
         for(int i = 0; i < 5; i++) {
             mockBooks.add(Warehouse.builder()
                     .id((long) i)
@@ -32,9 +40,38 @@ public class WarehouseTest {
                     .capacity(100)
                     .build());
         }
+    }
+
+    @BeforeEach
+    public void setUp() {
+        warehouseService = new WarehouseServiceImpl(warehouseRepository);
+    }
+
+    @Test
+    public void testGetById_shouldReturnWarehouse() {
+        // 2. define behavior of Repository
+        when(warehouseRepository.findAll()).thenReturn(mockBooks);
+
+        // 3. call service method
+        List<Warehouse> actualWarehouses = warehouseService.findAll();
+        Warehouse actualWarehouse = actualWarehouses.get(0);
+
+        // 4. assert the result
+        assertThat(actualWarehouse.getId()).isEqualTo(mockBooks.get(0).getId());
+        assertThat(actualWarehouse.getCode()).isEqualTo(mockBooks.get(0).getCode());
+        assertThat(actualWarehouse.getAddress()).isEqualTo(mockBooks.get(0).getAddress());
+        assertThat(actualWarehouse.getCapacity()).isEqualTo(mockBooks.get(0).getCapacity());
+
+        // 4.1 ensure repository is called
+        verify(warehouseRepository).findAll();
+    }
+
+    @Test
+    public void whenGetAll_shouldReturnList() {
+
 
         // 2. define behavior of Repository
-        when(warehouseService.findAll()).thenReturn(mockBooks);
+        when(warehouseRepository.findAll()).thenReturn(mockBooks);
 
         // 3. call service method
         List<Warehouse> actualWarehouses = warehouseService.findAll();
@@ -43,6 +80,6 @@ public class WarehouseTest {
         assertThat(actualWarehouses.size()).isEqualTo(mockBooks.size());
 
         // 4.1 ensure repository is called
-        verify(warehouseService).findAll();
+        verify(warehouseRepository).findAll();
     }
 }
