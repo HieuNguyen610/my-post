@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.Warehouse;
+import com.example.demo.exception.WarehouseNotFoundException;
 import com.example.demo.repository.WarehouseRepository;
 import com.example.demo.service.WarehouseService;
 import lombok.RequiredArgsConstructor;
@@ -17,5 +18,11 @@ public class WarehouseServiceImpl implements WarehouseService {
     @Override
     public List<Warehouse> findAll() {
         return warehouseRepository.findAll();
+    }
+
+    @Override
+    public Warehouse findById(Long id) {
+        return warehouseRepository.findById(id).orElseThrow
+                ( () -> new WarehouseNotFoundException("Warehouse not found with id: " + id));
     }
 }

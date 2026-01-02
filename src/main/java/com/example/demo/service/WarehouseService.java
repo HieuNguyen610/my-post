@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface WarehouseService {
     List<Warehouse> findAll();
+
+    Warehouse findById(Long id);
 }

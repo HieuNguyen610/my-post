@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.verify;
@@ -50,11 +51,10 @@ public class WarehouseTest {
     @Test
     public void testGetById_shouldReturnWarehouse() {
         // 2. define behavior of Repository
-        when(warehouseRepository.findAll()).thenReturn(mockBooks);
+        when(warehouseRepository.findById(1L)).thenReturn(Optional.of(mockBooks.get(0)));
 
         // 3. call service method
-        List<Warehouse> actualWarehouses = warehouseService.findAll();
-        Warehouse actualWarehouse = actualWarehouses.get(0);
+        Warehouse actualWarehouse = warehouseService.findById(1L);
 
         // 4. assert the result
         assertThat(actualWarehouse.getId()).isEqualTo(mockBooks.get(0).getId());
@@ -63,7 +63,7 @@ public class WarehouseTest {
         assertThat(actualWarehouse.getCapacity()).isEqualTo(mockBooks.get(0).getCapacity());
 
         // 4.1 ensure repository is called
-        verify(warehouseRepository).findAll();
+        verify(warehouseRepository).findById(1L);
     }
 
     @Test
