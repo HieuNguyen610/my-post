@@ -6,10 +6,7 @@ import com.example.demo.service.ParcelService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -34,5 +31,15 @@ public class ParcelController {
         response.put("data", parcelService.moveParcel(request));
         return response;
     }
+
+    @GetMapping("/parcels/{id}")
+    public Map<String, Object> getParcelById(@PathVariable Long id) {
+        Map<String, Object> info = new java.util.HashMap<>();
+        info.put("message", "Parcel by ID endpoint");
+        info.put("status", "success");
+        info.put("data", parcelService.findById(id)); // Replace null with actual data
+        return info;
+    }
+
 
 }

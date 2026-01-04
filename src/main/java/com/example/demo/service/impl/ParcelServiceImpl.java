@@ -1,10 +1,12 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.Parcel;
+import com.example.demo.entity.Warehouse;
 import com.example.demo.repository.ParcelRepository;
 import com.example.demo.repository.WarehouseRepository;
 import com.example.demo.request.MoveParcelRequest;
 import com.example.demo.response.MoveParcelResponse;
+import com.example.demo.response.ParcelResponse;
 import com.example.demo.response.WarehouseResponse;
 import com.example.demo.service.ParcelService;
 import lombok.RequiredArgsConstructor;
@@ -39,10 +41,36 @@ public class ParcelServiceImpl implements ParcelService {
                     return new WarehouseResponse(true, "Warehouse has enough space");
                 })
                 .orElse(new WarehouseResponse(false, "Warehouse not found"));
+
+        if (warehouseResponse.isAvailable()) {
+            /**
+             * move parcel to new warehouse
+             */
+            Parcel parcel = parcelRepository.findById(request.getParcelId())
+                    .orElseThrow(() -> new RuntimeException("Parcel not found with id: " + request.getParcelId()));
+            Warehouse newWarehouse = warehouseRepository.findById(request.getDestinationWarehouseId())
+                    .orElseThrow(() -> new RuntimeException("Warehouse not found with id: " + request.getDestinationWarehouseId()));
+            parcel.setWarehouse(newWarehouse);
+            parcelRepository.save(parcel);
+        }
+
         return MoveParcelResponse.builder()
                 .message(warehouseResponse.getMessage())
                 .parcelId(request.getParcelId())
                 .newWarehouseId(request.getDestinationWarehouseId())
+                .build();
+    }
+
+    @Override
+    public ParcelResponse findById(Long id) {
+        Parcel parcel = parcelRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Parcel not found with id: " + id));
+
+        return ParcelResponse.builder()
+                .id(parcel.getId())
+                .trackingCode(parcel.getTrackingCode())
+                .weight(parcel.getWeight())
+                .warehouse(parcel.getWarehouse())
                 .build();
     }
 }
