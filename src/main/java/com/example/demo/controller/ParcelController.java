@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Parcel;
 import com.example.demo.request.MoveParcelRequest;
+import com.example.demo.request.UpdateParcelRequest;
 import com.example.demo.service.ParcelService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,15 @@ public class ParcelController {
         info.put("status", "success");
         info.put("data", parcelService.findById(id)); // Replace null with actual data
         return info;
+    }
+
+    @PutMapping("/parcels/update")
+    public Map<String, Object> updateParcel(@Valid @RequestBody UpdateParcelRequest request) {
+        Map<String, Object> response = new java.util.HashMap<>();
+        response.put("message", "Parcel info updated successfully");
+        response.put("status", "success");
+        response.put("data", parcelService.updateParcel(request));
+        return response;
     }
 
 

@@ -5,11 +5,13 @@ import com.example.demo.entity.Warehouse;
 import com.example.demo.repository.ParcelRepository;
 import com.example.demo.repository.WarehouseRepository;
 import com.example.demo.request.MoveParcelRequest;
+import com.example.demo.request.UpdateParcelRequest;
 import com.example.demo.response.MoveParcelResponse;
 import com.example.demo.response.ParcelResponse;
 import com.example.demo.response.WarehouseResponse;
 import com.example.demo.service.ParcelService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,6 +64,7 @@ public class ParcelServiceImpl implements ParcelService {
     }
 
     @Override
+    @Cacheable(value = "parcels", key = "#id")
     public ParcelResponse findById(Long id) {
         Parcel parcel = parcelRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Parcel not found with id: " + id));
@@ -71,6 +74,31 @@ public class ParcelServiceImpl implements ParcelService {
                 .trackingCode(parcel.getTrackingCode())
                 .weight(parcel.getWeight())
                 .warehouse(parcel.getWarehouse())
+                .build();
+    }
+
+    @Override
+    @Transactional
+    public ParcelResponse updateParcel(UpdateParcelRequest request) {
+        Parcel parcel = parcelRepository.findById(request.getId())
+                .orElseThrow(() -> new RuntimeException("Parcel not found with id: " + request.getId()));
+
+        parcel.setTrackingCode(request.getTrackingCode());
+        parcel.setSender(request.getSender());
+        parcel.setReceiver(request.getReceiver());
+        parcel.setWeight(request.getWeight());
+        parcel.setStatus(request.getStatus());
+
+        Parcel savedParcel = parcelRepository.save(parcel);
+
+        return ParcelResponse.builder()
+                .id(savedParcel.getId())
+                .trackingCode(savedParcel.getTrackingCode())
+                .sender(savedParcel.getSender())
+                .receiver(savedParcel.getReceiver())
+                .weight(savedParcel.getWeight())
+                .status(savedParcel.getStatus())
+                .warehouse(savedParcel.getWarehouse())
                 .build();
     }
 }
