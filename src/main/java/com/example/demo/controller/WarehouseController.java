@@ -1,12 +1,13 @@
 package com.example.demo.controller;
 
+import com.example.demo.request.CreateWarehouseRequest;
 import com.example.demo.service.WarehouseService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -33,6 +34,15 @@ public class WarehouseController {
         map.put("status", "success");
         map.put("data", warehouseService.findById(id)); // Replace null with actual data
         return ResponseEntity.ok(map);
-    };
+    }
+
+    @PostMapping("/warehouses/create")
+    public Map<String, Object> createWarehouse(@Valid @RequestBody CreateWarehouseRequest request) {
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("message", "Warehouse created successfully");
+        response.put("status", "success");
+        response.put("data", warehouseService.createWarehouse(request)); // Replace null with actual data
+        return response;
+    }
 
 }

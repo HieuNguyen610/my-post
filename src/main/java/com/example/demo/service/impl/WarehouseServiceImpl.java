@@ -3,6 +3,8 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.Warehouse;
 import com.example.demo.exception.WarehouseNotFoundException;
 import com.example.demo.repository.WarehouseRepository;
+import com.example.demo.request.CreateWarehouseRequest;
+import com.example.demo.response.WarehouseResponse;
 import com.example.demo.service.WarehouseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,5 +26,15 @@ public class WarehouseServiceImpl implements WarehouseService {
     public Warehouse findById(Long id) {
         return warehouseRepository.findById(id).orElseThrow
                 ( () -> new WarehouseNotFoundException("Warehouse not found with id: " + id));
+    }
+
+    @Override
+    public Warehouse createWarehouse(CreateWarehouseRequest request) {
+        Warehouse warehouse = Warehouse.builder()
+                .code(request.getCode())
+                .address(request.getAddress())
+                .capacity(request.getCapacity())
+                .build();
+        return warehouseRepository.save(warehouse);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.demo.response;
+package com.example.demo.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class WarehouseResponse {
-    private boolean isAvailable;
-    private String message;
+public class CreateWarehouseRequest {
+    private Long code;
+
+    private String address;
+
+    private Integer capacity;
 }
