@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.entity.Parcel;
 import com.example.demo.request.MoveParcelRequest;
 import com.example.demo.request.UpdateParcelRequest;
+import com.example.demo.response.ApiResponse;
 import com.example.demo.service.ParcelService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,35 +20,23 @@ public class ParcelController {
     private final ParcelService parcelService;
 
     @GetMapping("/parcels")
-    public List<Parcel> getParcels() {
-        return parcelService.getAllParcels();
+    public ApiResponse<List<Parcel>> getParcels() {
+        return ApiResponse.success("Parcels retrieved successfully", parcelService.getAllParcels());
     }
 
     @PostMapping("/moveParcel")
-    public Map<String, Object> moveParcel(@Valid @RequestBody MoveParcelRequest request) {
-        Map<String, Object> response = new java.util.HashMap<>();
-        response.put("message", "Parcel moved successfully");
-        response.put("status", "success");
-        response.put("data", parcelService.moveParcel(request));
-        return response;
+    public ApiResponse<?> moveParcel(@Valid @RequestBody MoveParcelRequest request) {
+        return ApiResponse.success("Parcel moved successfully", parcelService.moveParcel(request));
     }
 
     @GetMapping("/parcels/{id}")
-    public Map<String, Object> getParcelById(@PathVariable Long id) {
-        Map<String, Object> info = new java.util.HashMap<>();
-        info.put("message", "Parcel by ID endpoint");
-        info.put("status", "success");
-        info.put("data", parcelService.findById(id)); // Replace null with actual data
-        return info;
+    public ApiResponse<?> getParcelById(@PathVariable Long id) {
+        return ApiResponse.success("Parcel by ID endpoint", parcelService.findById(id));
     }
 
     @PutMapping("/parcels/update")
-    public Map<String, Object> updateParcel(@Valid @RequestBody UpdateParcelRequest request) {
-        Map<String, Object> response = new java.util.HashMap<>();
-        response.put("message", "Parcel info updated successfully");
-        response.put("status", "success");
-        response.put("data", parcelService.updateParcel(request));
-        return response;
+    public ApiResponse<?> updateParcel(@Valid @RequestBody UpdateParcelRequest request) {
+        return ApiResponse.success("Parcel info updated successfully", parcelService.updateParcel(request));
     }
 
 

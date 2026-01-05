@@ -4,7 +4,6 @@ import com.example.demo.entity.Warehouse;
 import com.example.demo.exception.WarehouseNotFoundException;
 import com.example.demo.repository.WarehouseRepository;
 import com.example.demo.request.CreateWarehouseRequest;
-import com.example.demo.response.WarehouseResponse;
 import com.example.demo.service.WarehouseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

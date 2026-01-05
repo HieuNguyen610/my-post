@@ -20,7 +20,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class WarehouseTest {
+class WarehouseTest {
 
     private  WarehouseService warehouseService;
 
@@ -31,7 +31,7 @@ public class WarehouseTest {
 
 
     @BeforeAll
-    public static void beforeAll() {
+    static void beforeAll() {
         // 1. create mock data
         for(int i = 0; i < 5; i++) {
             mockBooks.add(Warehouse.builder()
@@ -44,12 +44,12 @@ public class WarehouseTest {
     }
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         warehouseService = new WarehouseServiceImpl(warehouseRepository);
     }
 
     @Test
-    public void testGetById_shouldReturnWarehouse() {
+    void testGetById_shouldReturnWarehouse() {
         // 2. define behavior of Repository
         when(warehouseRepository.findById(1L)).thenReturn(Optional.of(mockBooks.get(0)));
 
@@ -67,7 +67,7 @@ public class WarehouseTest {
     }
 
     @Test
-    public void whenGetAll_shouldReturnList() {
+    void whenGetAll_shouldReturnList() {
 
 
         // 2. define behavior of Repository

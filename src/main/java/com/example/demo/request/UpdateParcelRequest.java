@@ -1,7 +1,6 @@
 package com.example.demo.request;
 
 import com.example.demo.entity.ParcelStatus;
-import com.example.demo.entity.Warehouse;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
