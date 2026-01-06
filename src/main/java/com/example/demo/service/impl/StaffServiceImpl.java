@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Slf4j(topic = "STAFF_SERVICE")
 @RequiredArgsConstructor
@@ -17,8 +19,16 @@ public class StaffServiceImpl implements StaffService {
     private final StaffRepository staffRepository;
 
     @Override
-    public Object findAll() {
-        return staffRepository.findAll();
+    public List<StaffResponse> findAll() {
+        return staffRepository.findAll().stream().map
+                (staff -> StaffResponse.builder()
+                .id(staff.getId())
+                .username(staff.getUsername())
+                .email(staff.getEmail())
+                .phone(staff.getPhone())
+                .role(staff.getRole())
+                .dateOfBirth(staff.getDateOfBirth())
+                .build()).toList();
     }
 
     @Override
