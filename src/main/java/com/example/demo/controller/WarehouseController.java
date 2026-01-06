@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Warehouse;
+import com.example.demo.entity.ApiMessage;
 import com.example.demo.request.CreateWarehouseRequest;
 import com.example.demo.request.UpdateWarehouseRequest;
 import com.example.demo.response.ApiResponse;
@@ -20,21 +21,21 @@ public class WarehouseController {
 
     @GetMapping("/warehouses")
     public ResponseEntity<ApiResponse<List<Warehouse>>> getWarehouseInfo() {
-        return ResponseEntity.ok(ApiResponse.success("Warehouse info endpoint", warehouseService.findAll()));
+        return ResponseEntity.ok(ApiResponse.success(ApiMessage.WAREHOUSE_BY_ID.getMessage(), warehouseService.findAll()));
     }
 
     @GetMapping("/warehouses/{id}")
     public ResponseEntity<ApiResponse<Warehouse>> getWarehouseById(@PathVariable Long id) {
-        return ResponseEntity.ok(ApiResponse.success("Warehouse by ID endpoint", warehouseService.findById(id)));
+        return ResponseEntity.ok(ApiResponse.success(ApiMessage.WAREHOUSE_BY_ID.getMessage(), warehouseService.findById(id)));
     }
 
     @PostMapping("/warehouses/create")
     public ResponseEntity<ApiResponse<Warehouse>> createWarehouse(@Valid @RequestBody CreateWarehouseRequest request) {
-        return ResponseEntity.ok(ApiResponse.success("Warehouse created successfully", warehouseService.createWarehouse(request)));
+        return ResponseEntity.ok(ApiResponse.success(ApiMessage.WAREHOUSE_CREATED.getMessage(), warehouseService.createWarehouse(request)));
     }
 
     @PutMapping("/warehouses/update")
     public ResponseEntity<ApiResponse<Warehouse>> updateWarehouse(@Valid @RequestBody UpdateWarehouseRequest request) {
-        return ResponseEntity.ok(ApiResponse.success("Warehouse updated successfully", warehouseService.updateWarehouse(request)));
+        return ResponseEntity.ok(ApiResponse.success(ApiMessage.WAREHOUSE_UPDATED.getMessage(), warehouseService.updateWarehouse(request)));
     }
 }

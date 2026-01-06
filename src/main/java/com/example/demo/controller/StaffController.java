@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.ApiMessage;
 import com.example.demo.request.CreateStaffRequest;
 import com.example.demo.response.ApiResponse;
 import com.example.demo.response.StaffResponse;
@@ -20,11 +21,11 @@ public class StaffController {
 
     @GetMapping("/staffs")
     public ApiResponse<?> getStaffInfo() {
-        return ApiResponse.success("Staff info endpoint", staffService.findAll());
+        return ApiResponse.success(ApiMessage.USER_CREATED.getMessage(), staffService.findAll());
     }
 
     @PostMapping("/staffs/create")
     public ResponseEntity<ApiResponse<StaffResponse>> createStaff(@Valid @RequestBody CreateStaffRequest request) {
-        return ResponseEntity.ok(ApiResponse.success("Staff created successfully", staffService.createStaff(request)));
+        return ResponseEntity.ok(ApiResponse.success(ApiMessage.USER_CREATED.getMessage(), staffService.createStaff(request)));
     }
 }
