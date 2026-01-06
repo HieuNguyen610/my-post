@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MoveParcelResponse {
+public class MoveParcelResponse{
     private String message;
     private Long parcelId;
     private Long newWarehouseId;

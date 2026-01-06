@@ -1,9 +1,8 @@
-package com.example.demo;
+package com.example.demo.service.impl;
 
 import com.example.demo.entity.Warehouse;
 import com.example.demo.repository.WarehouseRepository;
 import com.example.demo.service.WarehouseService;
-import com.example.demo.service.impl.WarehouseServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +26,7 @@ class WarehouseTest {
     @Mock
     private WarehouseRepository warehouseRepository;
 
-    private static List<Warehouse> mockBooks = new ArrayList<>();
+    private static final List<Warehouse> mockBooks = new ArrayList<>();
 
 
     @BeforeAll
