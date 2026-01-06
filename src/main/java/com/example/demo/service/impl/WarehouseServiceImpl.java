@@ -28,6 +28,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     @Override
     @Cacheable(value = "warehouses", key = "#id")
     public Warehouse findById(Long id) {
+        log.info("Fetching warehouse with id: {}", id);
         return warehouseRepository.findById(id).orElseThrow
                 ( () -> new WarehouseNotFoundException("Warehouse not found with id: " + id));
     }

@@ -8,6 +8,6 @@ class FaviconController {
 
     @GetMapping("favicon.ico")
     void returnNoFavicon() {
-        throw new UnsupportedOperationException();
+//        throw new UnsupportedOperationException();
     }
 }
