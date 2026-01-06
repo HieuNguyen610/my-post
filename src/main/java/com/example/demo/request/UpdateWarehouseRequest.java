@@ -1,0 +1,18 @@
+package com.example.demo.request;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class UpdateWarehouseRequest {
+    private Long code;
+
+    private String address;
+
+    private Integer capacity;
+}

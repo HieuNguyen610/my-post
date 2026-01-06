@@ -2,9 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.entity.Warehouse;
 import com.example.demo.request.CreateWarehouseRequest;
-import com.example.demo.response.WarehouseResponse;
-import jakarta.validation.Valid;
-import org.springframework.http.ResponseEntity;
+import com.example.demo.request.UpdateWarehouseRequest;
 
 import java.util.List;
 
@@ -14,4 +12,6 @@ public interface WarehouseService {
     Warehouse findById(Long id);
 
     Warehouse createWarehouse(CreateWarehouseRequest request);
+
+    Warehouse updateWarehouse(UpdateWarehouseRequest request);
 }
