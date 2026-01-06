@@ -1,6 +1,6 @@
-package com.example.demo.entity;
+package com.example.demo.response;
 
-import jakarta.persistence.*;
+import com.example.demo.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,15 +9,12 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 import java.util.List;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 @Builder
-@Entity(name = "staffs")
-public class Staff {
+public class StaffResponse {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String username;
@@ -30,7 +27,5 @@ public class Staff {
 
     private Date dateOfBirth;
 
-    @Enumerated
-    @ElementCollection(fetch = FetchType.EAGER)
     private List<Role> role;
 }
