@@ -8,11 +8,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateParcelRequest {
+public class UpdateParcelRequest implements Serializable {
 
     @NotNull(message = "Parcel ID must not be null")
     @Min(value = 1, message = "Parcel ID must be greater than 0")

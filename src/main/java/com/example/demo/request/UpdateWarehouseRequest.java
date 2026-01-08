@@ -14,11 +14,10 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CreateWarehouseRequest implements Serializable {
+public class UpdateWarehouseRequest implements Serializable {
     @NotNull(message = "Code cannot be null")
     private Long code;
 
-    // Use @NotBlank so empty string "" is rejected as invalid
     @NotBlank(message = "Address cannot be null or blank")
     private String address;
 

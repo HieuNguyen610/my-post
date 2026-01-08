@@ -11,6 +11,7 @@ import com.example.demo.response.ParcelResponse;
 import com.example.demo.response.WarehouseResponse;
 import com.example.demo.service.ParcelService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Slf4j(topic = "PARCEL_SERVICE")
 @RequiredArgsConstructor
 public class ParcelServiceImpl implements ParcelService {
     private final ParcelRepository parcelRepository;
@@ -31,9 +33,7 @@ public class ParcelServiceImpl implements ParcelService {
     @Override
     @Transactional
     public MoveParcelResponse moveParcel(MoveParcelRequest request) {
-        /**
-         * check if new warehouse exists and has enough space left
-         */
+
         WarehouseResponse warehouseResponse = warehouseRepository.findById(request.getDestinationWarehouseId())
                 .map(warehouse -> {
                     long parcelCount = parcelRepository.countByWarehouseId(warehouse.getId());
@@ -45,9 +45,7 @@ public class ParcelServiceImpl implements ParcelService {
                 .orElse(new WarehouseResponse(false, "Warehouse not found"));
 
         if (warehouseResponse.isAvailable()) {
-            /**
-             * move parcel to new warehouse
-             */
+
             Parcel parcel = parcelRepository.findById(request.getParcelId())
                     .orElseThrow(() -> new RuntimeException("Parcel not found with id: " + request.getParcelId()));
             Warehouse newWarehouse = warehouseRepository.findById(request.getDestinationWarehouseId())
@@ -66,6 +64,7 @@ public class ParcelServiceImpl implements ParcelService {
     @Override
     @Cacheable(value = "parcels", key = "#id")
     public ParcelResponse findById(Long id) {
+        log.info("Fetching parcel with id: {}", id);
         Parcel parcel = parcelRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Parcel not found with id: " + id));
 
