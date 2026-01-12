@@ -3,10 +3,16 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.Staff;
 import com.example.demo.repository.StaffRepository;
 import com.example.demo.request.CreateStaffRequest;
+import com.example.demo.request.StaffSearchRequest;
+import com.example.demo.response.StaffPageResponse;
 import com.example.demo.response.StaffResponse;
 import com.example.demo.service.StaffService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -55,6 +61,40 @@ public class StaffServiceImpl implements StaffService {
                 .phone(savedStaff.getPhone())
                 .role(savedStaff.getRole())
                 .dateOfBirth(savedStaff.getDateOfBirth())
+                .build();
+    }
+
+    @Override
+    public StaffPageResponse searchStaffs(StaffSearchRequest request) {
+        // Validate and normalize paging parameters
+        int page = Math.max(request.getPage(), 0);
+        int size = request.getSize() <= 0 ? 10 : Math.min(request.getSize(), 100);
+
+        // Normalize keyword: treat empty/blank as null to match repository query behavior
+        String keyword = request.getKeyword() == null || request.getKeyword().trim().isEmpty()
+                ? null
+                : request.getKeyword().trim();
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "id"));
+
+        Page<Staff> staffPage = staffRepository.searchByKeyword(keyword, pageable);
+
+        List<StaffResponse> data = staffPage.getContent().stream().map(staff -> StaffResponse.builder()
+                .id(staff.getId())
+                .username(staff.getUsername())
+                // intentionally do not expose password
+                .email(staff.getEmail())
+                .phone(staff.getPhone())
+                .role(staff.getRole())
+                .dateOfBirth(staff.getDateOfBirth())
+                .build()).toList();
+
+        return StaffPageResponse.builder()
+                .page(page)
+                .size(size)
+                .totalElements(staffPage.getTotalElements())
+                .totalPages(staffPage.getTotalPages())
+                .staffData(data)
                 .build();
     }
 }

@@ -18,6 +18,7 @@ public enum ApiMessage {
     WAREHOUSE_BY_ID("Warehouse by ID endpoint"),
     WAREHOUSE_UPDATED("Warehouse updated successfully"),
 
+    USER_SEARCHED("User search successfully"),
     USER_CREATED("User created successfully"),
     USER_NOT_FOUND("User not found"),
     INTERNAL_ERROR("Internal server error"),
