@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.entity.ApiMessage;
 import com.example.demo.request.CreateStaffRequest;
 import com.example.demo.request.StaffSearchRequest;
+import com.example.demo.request.UpdateStaffRequest;
 import com.example.demo.response.ApiResponse;
 import com.example.demo.response.StaffPageResponse;
 import com.example.demo.response.StaffResponse;
@@ -41,5 +42,12 @@ public class StaffController {
     public ResponseEntity<ApiResponse<StaffPageResponse>> searchStaffs(@Valid @RequestBody StaffSearchRequest request) {
         StaffPageResponse result = staffService.searchStaffs(request);
         return ResponseEntity.ok(ApiResponse.success(ApiMessage.USER_SEARCHED.getMessage(), result));
+    }
+
+    @GetMapping("/staffs/update")
+    @Operation(summary = "Update staff", description = "Update an existing staff member")
+    public ResponseEntity<ApiResponse<StaffResponse>> updateStaff(@Valid @RequestBody UpdateStaffRequest request) {
+        StaffResponse response = staffService.updateStaff(request);
+        return ResponseEntity.ok(ApiResponse.success(ApiMessage.USER_UPDATED.getMessage(), response));
     }
 }

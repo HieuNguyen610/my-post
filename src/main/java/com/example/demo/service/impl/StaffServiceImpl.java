@@ -4,6 +4,7 @@ import com.example.demo.entity.Staff;
 import com.example.demo.repository.StaffRepository;
 import com.example.demo.request.CreateStaffRequest;
 import com.example.demo.request.StaffSearchRequest;
+import com.example.demo.request.UpdateStaffRequest;
 import com.example.demo.response.StaffPageResponse;
 import com.example.demo.response.StaffResponse;
 import com.example.demo.service.StaffService;
@@ -68,5 +69,20 @@ public class StaffServiceImpl implements StaffService {
                 .totalPages(staffPage.getTotalPages())
                 .staffData(data)
                 .build();
+    }
+
+    @Override
+    public StaffResponse updateStaff(UpdateStaffRequest request) {
+        Staff existingStaff = staffRepository.findById(request.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Staff with id " + request.getId() + " not found."));
+        // Update fields
+        existingStaff.setUsername(request.getUsername());
+        existingStaff.setEmail(request.getEmail());
+        existingStaff.setPhone(request.getPhone());
+        existingStaff.setDateOfBirth(request.getDateOfBirth());
+        existingStaff.setRole(request.getRole());
+
+        Staff updatedStaff = staffRepository.save(existingStaff);
+        return StaffResponse.fromEntity(updatedStaff);
     }
 }
