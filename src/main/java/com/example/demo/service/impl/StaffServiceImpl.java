@@ -27,14 +27,7 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public List<StaffResponse> findAll() {
         return staffRepository.findAll().stream().map
-                (staff -> StaffResponse.builder()
-                .id(staff.getId())
-                .username(staff.getUsername())
-                .email(staff.getEmail())
-                .phone(staff.getPhone())
-                .role(staff.getRole())
-                .dateOfBirth(staff.getDateOfBirth())
-                .build()).toList();
+                (StaffResponse::fromEntity).toList();
     }
 
     @Override
@@ -42,26 +35,13 @@ public class StaffServiceImpl implements StaffService {
         staffRepository.findByEmail(request.getEmail()).ifPresent(s -> {
             throw new IllegalArgumentException("Staff with email " + request.getEmail() + " already exists.");
         });
-        Staff newStaff = Staff.builder()
-                .username(request.getUsername())
-                .email(request.getEmail())
-                .phone(request.getPhone())
-                .dateOfBirth(request.getDateOfBirth())
-                .password(request.getPassword())
-                .role(request.getRole())
-                .build();
+        Staff newStaff = CreateStaffRequest.toStaff(request);
+        newStaff.setPassword(request.getPassword());
 
         log.info("Creating new staff with email: {}", request.getEmail());
         Staff savedStaff = staffRepository.save(newStaff);
 
-        return StaffResponse.builder()
-                .id(savedStaff.getId())
-                .username(savedStaff.getUsername())
-                .email(savedStaff.getEmail())
-                .phone(savedStaff.getPhone())
-                .role(savedStaff.getRole())
-                .dateOfBirth(savedStaff.getDateOfBirth())
-                .build();
+        return StaffResponse.fromEntity(savedStaff);
     }
 
     @Override
@@ -79,15 +59,7 @@ public class StaffServiceImpl implements StaffService {
 
         Page<Staff> staffPage = staffRepository.searchByKeyword(keyword, pageable);
 
-        List<StaffResponse> data = staffPage.getContent().stream().map(staff -> StaffResponse.builder()
-                .id(staff.getId())
-                .username(staff.getUsername())
-                // intentionally do not expose password
-                .email(staff.getEmail())
-                .phone(staff.getPhone())
-                .role(staff.getRole())
-                .dateOfBirth(staff.getDateOfBirth())
-                .build()).toList();
+        List<StaffResponse> data = staffPage.getContent().stream().map(StaffResponse::fromEntity).toList();
 
         return StaffPageResponse.builder()
                 .page(page)

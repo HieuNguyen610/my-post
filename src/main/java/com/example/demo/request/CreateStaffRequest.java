@@ -1,6 +1,7 @@
 package com.example.demo.request;
 
 import com.example.demo.entity.Role;
+import com.example.demo.entity.Staff;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -40,4 +41,14 @@ public class CreateStaffRequest implements Serializable {
     private Date dateOfBirth;
 
     private List<Role> role;
+
+    public static Staff toStaff(CreateStaffRequest request) {
+        return Staff.builder()
+                .username(request.getUsername())
+                .email(request.getEmail())
+                .phone(request.getPhone())
+                .dateOfBirth(request.getDateOfBirth())
+                .role(request.getRole())
+                .build();
+    }
 }
